@@ -59,22 +59,27 @@ public class ExcelExport {
     }
     public void writeDataLines(JSONObject timeTracks, String projectId, String pId){
         int rowNum = 1;
-            JSONArray array = timeTracks.getJSONArray("time_records");
-            JSONObject project = timeTracks.getJSONObject("related");
-            project = project.getJSONObject("Project");
-            project = project.getJSONObject(projectId);
-            for(Object timeTrack : array){
-                user = ((JSONObject)timeTrack).getString("user_name").replace(' ', '_');
-                Row row = sheet.createRow(rowNum);
-                createCell(row, 0, formatter.format(new Date(((JSONObject)timeTrack).getLong("record_date")*1000)));
-                createCell(row, 1, ((JSONObject)timeTrack).get("value").toString().replace('.', ','));
-                createCell(row, 2, pId);
-                createCell(row, 3, project.getString("name"));
-                createCell(row, 4, ((JSONObject)timeTrack).getString("summary"));
-                createCell(row, 5, "Würzburg");
-                rowNum++;
-            }
+        double sum = 0;
+        JSONArray array = timeTracks.getJSONArray("time_records");
+        JSONObject project = timeTracks.getJSONObject("related");
+        project = project.getJSONObject("Project");
+        project = project.getJSONObject(projectId);
+        for(Object timeTrack : array){
+            sum += ((JSONObject)timeTrack).getDouble("value");
+            user = ((JSONObject)timeTrack).getString("user_name").replace(' ', '_');
+            Row row = sheet.createRow(rowNum);
+            createCell(row, 0, formatter.format(new Date(((JSONObject)timeTrack).getLong("record_date")*1000)));
+            createCell(row, 1, ((JSONObject)timeTrack).get("value").toString().replace('.', ','));
+            createCell(row, 2, pId);
+            createCell(row, 3, project.getString("name"));
+            createCell(row, 4, ((JSONObject)timeTrack).getString("summary"));
+            createCell(row, 5, "Würzburg");
+            rowNum++;
         }
+        Row row = sheet.createRow(rowNum);
+        createCell(row, 0, "Gesamt:");
+        createCell(row, 1, String.valueOf(sum).replace('.', ','));
+    }
 
     public void export(JSONObject timeTracks, String projectId, String pId){
         try {
