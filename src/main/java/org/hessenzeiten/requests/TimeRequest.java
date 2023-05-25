@@ -1,4 +1,6 @@
-package org.hessenzeiten;
+package org.hessenzeiten.requests;
+import org.hessenzeiten.utils.ExcelExport;
+import org.hessenzeiten.utils.JsonFileHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,11 +9,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Path;
 import java.util.Objects;
 
 public class TimeRequest {
-    private Path path = null;
     public TimeRequest(String fromTo){
         String token = Objects.requireNonNull(JsonFileHandler.readFromFile()).get("token").toString();
         String[] projects = {"160", "83", "49"};
@@ -26,7 +26,7 @@ public class TimeRequest {
                         .uri(new URI("https://ac.ai-ag.de/api/v1/projects/"+ projects[i] + "/time-records/filtered-by-date/" + fromTo))
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-                path = new ExcelExport().export(new JSONObject(response.body()), projects[i], pId[i]);
+                new ExcelExport().export(new JSONObject(response.body()), projects[i], pId[i]);
             }catch(JSONException e){
                 JOptionPane.showMessageDialog(null,"Kein Zugriff auf Projekt " + projects[i]);
             }

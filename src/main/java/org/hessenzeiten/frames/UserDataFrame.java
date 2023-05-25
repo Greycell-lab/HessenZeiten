@@ -1,10 +1,10 @@
-package org.hessenzeiten;
+package org.hessenzeiten.frames;
 
+import org.hessenzeiten.requests.UserTokenRequest;
 import org.json.JSONException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 
 public class UserDataFrame extends JFrame {
     public UserDataFrame(){

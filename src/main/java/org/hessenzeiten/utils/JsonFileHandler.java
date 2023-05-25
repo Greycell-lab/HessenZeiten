@@ -1,4 +1,4 @@
-package org.hessenzeiten;
+package org.hessenzeiten.utils;
 
 import org.json.JSONObject;
 

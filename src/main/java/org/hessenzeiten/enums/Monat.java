@@ -1,4 +1,4 @@
-package org.hessenzeiten;
+package org.hessenzeiten.enums;
 
 public enum Monat {
     JANUAR("Januar", 1),

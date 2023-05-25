@@ -1,10 +1,12 @@
-package org.hessenzeiten;
+package org.hessenzeiten.utils;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hessenzeiten.enums.Monat;
+import org.hessenzeiten.requests.TimeRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +92,7 @@ public class ExcelExport {
         }
     }
 
-    public Path export(JSONObject timeTracks, String projectId, String pId){
+    public void export(JSONObject timeTracks, String projectId, String pId){
         try {
             writeHeaderLine();
             if(writeDataLines(timeTracks, projectId, pId)) {
@@ -106,17 +108,9 @@ public class ExcelExport {
                 out.close();
                 workbook.close();
                 exportedList.add(path + File.separator + "tasks" + user + "_" + projectId + ".xlsx");
-                return path;
-            }
-            else {
-                return null;
             }
         }catch(IOException e){
             e.printStackTrace();
-            return null;
         }
-    }
-    public Monat getMonth() {
-        return month;
     }
 }

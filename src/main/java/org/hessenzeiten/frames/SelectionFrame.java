@@ -1,7 +1,9 @@
-package org.hessenzeiten;
+package org.hessenzeiten.frames;
+
+import org.hessenzeiten.enums.Monat;
+import org.hessenzeiten.utils.ExcelExport;
 
 import javax.swing.*;
-import java.awt.event.WindowEvent;
 import java.util.Objects;
 
 public class SelectionFrame extends JFrame {
@@ -19,9 +21,7 @@ public class SelectionFrame extends JFrame {
         }
         JComboBox<String> months = new JComboBox<>(monthStrings);
         JButton export = new JButton("Export");
-        export.addActionListener(e -> {
-            new ExcelExport(Monat.valueOf(Objects.requireNonNull(months.getSelectedItem()).toString().toUpperCase()));
-        });
+        export.addActionListener(e -> new ExcelExport(Monat.valueOf(Objects.requireNonNull(months.getSelectedItem()).toString().toUpperCase())));
         panel.add(months);
         panel.add(export);
         panel.setVisible(true);
