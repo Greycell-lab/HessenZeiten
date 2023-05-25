@@ -1,8 +1,6 @@
 package org.hessenzeiten;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class SelectionFrame extends JFrame {
@@ -24,8 +22,10 @@ public class SelectionFrame extends JFrame {
         });
         panel.add(months);
         panel.add(export);
+        panel.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(panel);
+        this.setLocationRelativeTo(null);
         this.pack();
         this.setVisible(true);
     }
