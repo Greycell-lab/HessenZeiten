@@ -1,4 +1,5 @@
 package org.hessenzeiten;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -13,11 +14,11 @@ public class TimeRequest {
     private Path path = null;
     public TimeRequest(String fromTo){
         String token = Objects.requireNonNull(JsonFileHandler.readFromFile()).get("token").toString();
-        String[] projects = {"160", "83", "49", "160"};
-        String[] pId = {"AZ", "AZ", "AZ", "AZ"};
+        /*String[] projects = {"160", "83", "49", "160"};
+        String[] pId = {"AZ", "AZ", "AZ", "AZ"};*/
 
-        /*String[] projects = {"26", "27", "28", "29"};
-        String[] pId = {"LBIH", "HZD", "HMO", "VOL_Stellen"};*/
+        String[] projects = {"26", "27", "28", "29"};
+        String[] pId = {"LBIH", "HZD", "HMO", "VOL_Stellen"};
         int counter = 0;
         for(int i=0;i< projects.length;i++){
             try {
@@ -27,7 +28,10 @@ public class TimeRequest {
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
                 path = new ExcelExport().export(new JSONObject(response.body()), projects[i], pId[i]);
-            }catch(Exception e){
+            }catch(JSONException e){
+                JOptionPane.showMessageDialog(null,"Kein Zugriff auf Projekt " + projects[i]);
+            }
+            catch(Exception e){
                 e.printStackTrace();
             }
         }

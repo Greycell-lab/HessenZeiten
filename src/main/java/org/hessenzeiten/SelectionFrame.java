@@ -1,10 +1,12 @@
 package org.hessenzeiten;
 
 import javax.swing.*;
+import java.awt.event.WindowEvent;
 import java.util.Objects;
 
 public class SelectionFrame extends JFrame {
-    public SelectionFrame(){
+    public SelectionFrame(UserDataFrame frame){
+        if(frame != null) frame.dispose();
         init();
     }
     public void init(){
