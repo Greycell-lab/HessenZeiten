@@ -107,7 +107,7 @@ public class ExcelExport {
                 workbook.write(out);
                 out.close();
                 workbook.close();
-                exportedList.add(path + File.separator + "tasks" + user + "_" + projectId + ".xlsx");
+                exportedList.add(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + ".xlsx");
             }
         }catch(IOException e){
             e.printStackTrace();

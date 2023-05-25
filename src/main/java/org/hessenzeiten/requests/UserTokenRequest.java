@@ -1,6 +1,5 @@
 package org.hessenzeiten.requests;
 
-import org.hessenzeiten.requests.LoginRequest;
 import org.hessenzeiten.utils.JsonFileHandler;
 
 public class UserTokenRequest {
