@@ -100,7 +100,7 @@ public class ExcelExport {
                         + "Desktop" + File.separator
                         + "Hessenzeit_Export" + File.separator);
                 Files.createDirectories(path);
-                File file = new File(path + File.separator + "tasks" + user + "_" + projectId + ".xlsx");
+                File file = new File(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + ".xlsx");
                 FileOutputStream out = new FileOutputStream(file);
                 workbook.write(out);
                 out.close();
@@ -116,7 +116,6 @@ public class ExcelExport {
             return null;
         }
     }
-
     public Monat getMonth() {
         return month;
     }
