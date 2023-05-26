@@ -31,12 +31,14 @@ public class ExcelExport {
     private final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
     private String user;
     private static Monat month;
+    private static Integer year;
     public static ArrayList<String> exportedList = new ArrayList<>();
     public ExcelExport(){
     }
-    public ExcelExport(Monat m) {
+    public ExcelExport(Monat m, String y) {
         month = m;
-        LocalDate dateFrom = LocalDate.of(LocalDate.now().getYear(), month.getNum(), 1);
+        year = Integer.parseInt(y);
+        LocalDate dateFrom = LocalDate.of(year, month.getNum(), 1);
         LocalDate dateTo = dateFrom.withDayOfMonth(dateFrom.getMonth().length(dateFrom.isLeapYear()));
         String fromTo = "?from=" + dateFrom + "&to=" + dateTo;
         new TimeRequest(fromTo);
@@ -102,12 +104,12 @@ public class ExcelExport {
                         + "Desktop" + File.separator
                         + "Hessenzeit_Export" + File.separator);
                 Files.createDirectories(path);
-                File file = new File(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + ".xlsx");
+                File file = new File(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + "_" + year + ".xlsx");
                 FileOutputStream out = new FileOutputStream(file);
                 workbook.write(out);
                 out.close();
                 workbook.close();
-                exportedList.add(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + ".xlsx");
+                exportedList.add(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + "_" + year + ".xlsx");
             }
         }catch(IOException e){
             e.printStackTrace();

@@ -2,6 +2,7 @@ package org.hessenzeiten.utils;
 
 import org.json.JSONObject;
 
+import javax.swing.*;
 import java.io.*;
 
 public class JsonFileHandler {
@@ -18,12 +19,11 @@ public class JsonFileHandler {
     }
     public static JSONObject readFromFile(){
         try(BufferedReader reader = new BufferedReader(new FileReader("token.json"))){
-
             return new JSONObject(reader.readLine());
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Token Datei nicht gefunden.");
+            return null;
         }
-        return null;
     }
     public static boolean fileExists(){
         return new File("token.json").exists();
