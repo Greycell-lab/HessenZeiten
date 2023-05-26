@@ -4,6 +4,9 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JsonFileHandler {
     private final JSONObject jsonToken;
@@ -13,7 +16,9 @@ public class JsonFileHandler {
     public void writeToFile(){
         try(PrintWriter writer = new PrintWriter("token.json")){
             writer.println(jsonToken);
-        }catch(FileNotFoundException e){
+            Path path = Paths.get("token.json");
+            Files.setAttribute(path, "dos:hidden", true);
+        } catch(IOException e){
             e.printStackTrace();
         }
     }
