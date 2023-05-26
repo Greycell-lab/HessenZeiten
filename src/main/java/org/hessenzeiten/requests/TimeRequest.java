@@ -14,11 +14,11 @@ import java.util.Objects;
 public class TimeRequest {
     public TimeRequest(String fromTo){
         String token = Objects.requireNonNull(JsonFileHandler.readFromFile()).get("token").toString();
-        /*String[] projects = {"160", "83", "49"};
-        String[] pId = {"AZ", "AZ", "AZ"};*/
+        String[] projects = {"160", "83", "49"};
+        String[] pId = {"AZ", "AZ", "AZ"};
 
-        String[] projects = {"26", "27", "28", "29"};
-        String[] pId = {"LBIH", "HZD", "HMO", "VOL_Stellen"};
+        /*String[] projects = {"26", "27", "28", "29"};
+        String[] pId = {"LBIH", "HZD", "HMO", "VOL_Stellen"};*/
         for(int i=0;i< projects.length;i++){
             try {
                 HttpRequest request = HttpRequest.newBuilder()
@@ -43,6 +43,5 @@ public class TimeRequest {
             JOptionPane.showMessageDialog(null, "Export erfolgreich.\n" + fullExport);
             ExcelExport.exportedList.clear();
         }
-
     }
 }
