@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class SelectionFrame extends JFrame {
@@ -53,7 +52,6 @@ public class SelectionFrame extends JFrame {
         JLabel employeeId = new JLabel("Mitarbeiter");
         JTextField projectText = new JTextField();
         ArrayList<String> employeeStrings = new ArrayList<>();
-        HashMap<String, Integer> employeeMap = new HashMap<>();
         JComboBox<String> employeeBox = new JComboBox<>();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -63,9 +61,6 @@ public class SelectionFrame extends JFrame {
             JSONArray array = object.getJSONArray("time_records");
             for(Object employee : array){
                 JSONObject emp = ((JSONObject)employee);
-                if(employeeMap.get(emp.getString("user_name")) == null){
-                    employeeMap.put(emp.getString("user_name"), emp.getInt("user_id"));
-                }
                 if(!employeeStrings.contains(emp.getString("user_name"))) employeeStrings.add(emp.getString("user_name"));
             }
             String[] eStrings = new String[employeeStrings.size()];
