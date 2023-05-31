@@ -7,7 +7,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Path;
 import java.util.Objects;
 
 public class TimeRequest {
@@ -16,14 +15,6 @@ public class TimeRequest {
 
     }
     public TimeRequest(String fromTo, int projectId){
-
-
-        /*String[] projects = {"160", "83", "49"};
-        String[] pId = {"AZ", "AZ", "AZ"};*/
-
-        /*String[] projects = {"26", "27", "28", "29"};
-        String[] pId = {"LBIH", "HZD", "HMO", "VOL_Stellen"};*/
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .setHeader("X-Angie-AuthApiToken", token)
@@ -34,15 +25,6 @@ public class TimeRequest {
         }catch(Exception e){
             e.printStackTrace();
         }
-        /*if(!ExcelExport.exportedList.isEmpty()) {
-            StringBuilder fullExport = new StringBuilder();
-            for(String s : ExcelExport.exportedList){
-                fullExport.append(s);
-                fullExport.append("\n");
-            }
-            JOptionPane.showMessageDialog(null, "Export erfolgreich.\n" + fullExport);
-            ExcelExport.exportedList.clear();
-        }*/
     }
     public JSONObject getResponseObject(int projectId, String fromTo){
         try {

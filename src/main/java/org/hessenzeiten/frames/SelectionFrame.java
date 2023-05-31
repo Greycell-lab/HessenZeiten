@@ -10,10 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SelectionFrame extends JFrame {
     private static JComboBox<String> months;
@@ -34,7 +32,6 @@ public class SelectionFrame extends JFrame {
             yearStrings.add(String.valueOf(j));
         }
         String[] yearMonthStrings = new String[LocalDate.now().getMonthValue()];
-        System.out.println();
         System.arraycopy(monthStrings, 0, yearMonthStrings, 0, yearMonthStrings.length);
         DefaultComboBoxModel<String> defaultMonths = new DefaultComboBoxModel<>(monthStrings);
         DefaultComboBoxModel<String> actualYearMonths = new DefaultComboBoxModel<>(yearMonthStrings);
@@ -81,8 +78,6 @@ public class SelectionFrame extends JFrame {
         export.addActionListener(e -> {
             try {
                 fileChooser.showSaveDialog(null);
-                System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-
                 new ExcelExport(
                         Monat.valueOf(
                                 Objects.requireNonNull(months.getSelectedItem()).toString().toUpperCase()),
@@ -91,7 +86,6 @@ public class SelectionFrame extends JFrame {
                 JOptionPane.showMessageDialog(null, "Falsches Format für Projekt oder Mitarbeiter ID");
             }
         });
-
         panel.add(months);
         panel.add(years);
         panel.add(new JPanel());
@@ -101,8 +95,6 @@ public class SelectionFrame extends JFrame {
         panel.add(employeeId);
         panel.add(employeeBox);
         panel.add(export);
-
-        //panel.add(employeeText);
         panel.setLayout(new GridLayout(0,3));
         panel.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -112,6 +104,6 @@ public class SelectionFrame extends JFrame {
         this.setVisible(true);
     }
     public static Monat getMonth(){
-        return Monat.valueOf(months.getSelectedItem().toString().toUpperCase());
+        return Monat.valueOf(Objects.requireNonNull(months.getSelectedItem()).toString().toUpperCase());
     }
 }

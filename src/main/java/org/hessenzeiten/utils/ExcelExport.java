@@ -16,10 +16,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,18 +31,14 @@ public class ExcelExport {
     private String user;
     private static Monat month;
     private static Integer year;
-    private static int pId;
     private static String eId;
     public static ArrayList<String> exportedList = new ArrayList<>();
-    public static JComboBox<String> employeeBox = new JComboBox<>();
-    public static JSONObject responseObject;
     public static String path;
     public ExcelExport(){
     }
     public ExcelExport(Monat m, String y, int projectId, String employeeId, String p) {
         month = m;
         year = Integer.parseInt(y);
-        pId = projectId;
         eId = employeeId;
         path = p;
         new TimeRequest(getDurationString(year, SelectionFrame.getMonth()), projectId);
@@ -76,7 +68,6 @@ public class ExcelExport {
         int rowNum = 1;
         double sum = 0;
         JSONArray array = timeTracks.getJSONArray("time_records");
-        System.out.println(timeTracks);
         try {
             JSONObject project = timeTracks.getJSONObject("related");
             project = project.getJSONObject("Project");
