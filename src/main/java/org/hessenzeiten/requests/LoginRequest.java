@@ -9,7 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class LoginRequest extends JSONObject {
+public class LoginRequest {
     private final String loginString;
     public LoginRequest(String loginString) {
         this.loginString = loginString;

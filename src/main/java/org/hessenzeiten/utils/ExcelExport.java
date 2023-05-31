@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hessenzeiten.enums.Monat;
+import org.hessenzeiten.frames.SelectionFrame;
 import org.hessenzeiten.requests.TimeRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import static org.apache.poi.ss.util.CellUtil.createCell;
 
@@ -32,16 +35,21 @@ public class ExcelExport {
     private String user;
     private static Monat month;
     private static Integer year;
+    private static int pId;
+    private static String eId;
     public static ArrayList<String> exportedList = new ArrayList<>();
+    public static JComboBox<String> employeeBox = new JComboBox<>();
+    public static JSONObject responseObject;
+    public static String path;
     public ExcelExport(){
     }
-    public ExcelExport(Monat m, String y) {
+    public ExcelExport(Monat m, String y, int projectId, String employeeId, String p) {
         month = m;
         year = Integer.parseInt(y);
-        LocalDate dateFrom = LocalDate.of(year, month.getNum(), 1);
-        LocalDate dateTo = dateFrom.withDayOfMonth(dateFrom.getMonth().length(dateFrom.isLeapYear()));
-        String fromTo = "?from=" + dateFrom + "&to=" + dateTo;
-        new TimeRequest(fromTo);
+        pId = projectId;
+        eId = employeeId;
+        path = p;
+        new TimeRequest(getDurationString(year, SelectionFrame.getMonth()), projectId);
     }
     public void writeHeaderLine(){
         sheet = workbook.createSheet("Zeiten");
@@ -64,25 +72,28 @@ public class ExcelExport {
             sheet.autoSizeColumn(i);
         }
     }
-    public boolean writeDataLines(JSONObject timeTracks, String projectId, String pId){
+    public boolean writeDataLines(JSONObject timeTracks, int projectId){
         int rowNum = 1;
         double sum = 0;
         JSONArray array = timeTracks.getJSONArray("time_records");
+        System.out.println(timeTracks);
         try {
             JSONObject project = timeTracks.getJSONObject("related");
             project = project.getJSONObject("Project");
-            project = project.getJSONObject(projectId);
+            project = project.getJSONObject(String.valueOf(projectId));
             for (Object timeTrack : array) {
-                sum += ((JSONObject) timeTrack).getDouble("value");
-                user = ((JSONObject) timeTrack).getString("user_name").replace(' ', '_');
-                Row row = sheet.createRow(rowNum);
-                createCell(row, 0, formatter.format(new Date(((JSONObject) timeTrack).getLong("record_date") * 1000)));
-                createCell(row, 1, ((JSONObject) timeTrack).get("value").toString().replace('.', ','));
-                createCell(row, 2, pId);
-                createCell(row, 3, project.getString("name"));
-                createCell(row, 4, ((JSONObject) timeTrack).getString("summary"));
-                createCell(row, 5, "Würzburg");
-                rowNum++;
+                if(eId.equals(((JSONObject)timeTrack).getString("user_name"))) {
+                    sum += ((JSONObject) timeTrack).getDouble("value");
+                    user = ((JSONObject) timeTrack).getString("user_name").replace(' ', '_');
+                    Row row = sheet.createRow(rowNum);
+                    createCell(row, 0, formatter.format(new Date(((JSONObject) timeTrack).getLong("record_date") * 1000)));
+                    createCell(row, 1, ((JSONObject) timeTrack).get("value").toString().replace('.', ','));
+                    createCell(row, 2, "placeholder");
+                    createCell(row, 3, project.getString("name"));
+                    createCell(row, 4, ((JSONObject) timeTrack).getString("summary"));
+                    createCell(row, 5, "Würzburg");
+                    rowNum++;
+                }
             }
             Row row = sheet.createRow(rowNum);
             createCell(row, 0, "Gesamt:");
@@ -94,16 +105,10 @@ public class ExcelExport {
         }
     }
 
-    public void export(JSONObject timeTracks, String projectId, String pId){
+    public void export(JSONObject timeTracks, int projectId, String path){
         try {
             writeHeaderLine();
-            if(writeDataLines(timeTracks, projectId, pId)) {
-                Path path = Paths.get("C:" + File.separator
-                        + "Users" + File.separator
-                        + System.getProperty("user.name") + File.separator
-                        + "Desktop" + File.separator
-                        + "Hessenzeit_Export" + File.separator);
-                Files.createDirectories(path);
+            if(writeDataLines(timeTracks, projectId)) {
                 File file = new File(path + File.separator + "tasks" + user + "_" + projectId + "_" + month.getName() + "_" + year + ".xlsx");
                 FileOutputStream out = new FileOutputStream(file);
                 workbook.write(out);
@@ -114,5 +119,15 @@ public class ExcelExport {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+    public static String getDurationString(JComboBox<String> yearBox, JComboBox<String> monthBox){
+        LocalDate dateFrom = LocalDate.of(Integer.parseInt(Objects.requireNonNull(yearBox.getSelectedItem()).toString()), monthBox.getSelectedIndex()+1, 1);
+        LocalDate dateTo = dateFrom.withDayOfMonth(dateFrom.getMonth().length(dateFrom.isLeapYear()));
+        return "?from=" + dateFrom + "&to=" + dateTo;
+    }
+    public static String getDurationString(int year, Monat month){
+        LocalDate dateFrom = LocalDate.of(year, month.getNum(), 1);
+        LocalDate dateTo = dateFrom.withDayOfMonth(dateFrom.getMonth().length(dateFrom.isLeapYear()));
+        return "?from=" + dateFrom + "&to=" + dateTo;
     }
 }
