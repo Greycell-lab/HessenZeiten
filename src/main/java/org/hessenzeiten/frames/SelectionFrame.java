@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,6 +21,9 @@ public class SelectionFrame extends JFrame {
         init();
     }
     public void init(){
+        this.setTitle("Zeiterfassung");
+        this.setPreferredSize(new Dimension(500, 150));
+        this.setResizable(false);
         JPanel panel = new JPanel();
         String[] monthStrings = new String[12];
         ArrayList<String> yearStrings = new ArrayList<>();
@@ -48,8 +53,11 @@ public class SelectionFrame extends JFrame {
             }
             this.pack();
         });
+        Border blackLine = BorderFactory.createLineBorder(Color.BLACK);
         JLabel projectId = new JLabel("Projekt ID");
+        projectId.setBorder(blackLine);
         JLabel employeeId = new JLabel("Mitarbeiter");
+        employeeId.setBorder(blackLine);
         JTextField projectText = new JTextField();
         ArrayList<String> employeeStrings = new ArrayList<>();
         JComboBox<String> employeeBox = new JComboBox<>();
@@ -77,13 +85,19 @@ public class SelectionFrame extends JFrame {
                         Monat.valueOf(
                                 Objects.requireNonNull(months.getSelectedItem()).toString().toUpperCase()),
                         Objects.requireNonNull(years.getSelectedItem()).toString(), Integer.parseInt(projectText.getText()), Objects.requireNonNull(employeeBox.getSelectedItem()).toString(), fileChooser.getSelectedFile().getAbsolutePath());
+                JOptionPane.showMessageDialog(null, "Gespeichert");
             }catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(null, "Falsches Format für Projekt oder Mitarbeiter ID");
+            }catch(NullPointerException ex){
+                JOptionPane.showMessageDialog(null, "Abgebrochen");
             }
         });
+        JLabel timeLabel = new JLabel("Zeitraum");
+        timeLabel.setBorder(blackLine);
+        panel.setBackground(Color.CYAN);
+        panel.add(timeLabel);
         panel.add(months);
         panel.add(years);
-        panel.add(new JPanel());
         panel.add(projectId);
         panel.add(projectText);
         panel.add(setId);
